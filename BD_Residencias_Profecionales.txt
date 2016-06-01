@@ -115,3 +115,306 @@ references Carrera (Id_Carrera)
 
 alter table AlumnosCalificacion add foreign key (Id_Carrera)
 references Carrera (Id_Carrera)
+
+----Creacion de Bitacoras---
+ create table BitacoraAlumnos
+ (
+	Usuario Varchar(15),
+	Matricula_Al varchar(10),
+	Nombre_Nuevo varchar (40),
+	Nombre_Viejo varchar (40),
+	ApellidoP_Nuevo varchar (40),
+	ApellidoP_Viejo varchar (40),
+	ApellidoM_Nuevo varchar (40),
+	ApellidoM_Viejo varchar (40),
+	Id_Carrera_Nuevo varchar (10),
+	Id_Carrera_Viejo varchar (10),
+	Correo_Nuevo varchar (100),
+	Correo_Viejo varchar (100),
+	Telefono_Nuevo varchar(10),
+	Telefono_Viejo varchar(10),
+	Sexo_Nuevo varchar(1),
+	Sexo_Viejo varchar(1),
+	Transaccion varchar(15),
+	Fecha datetime
+ )
+ 
+ create table BitacoraRevisores
+ (
+	Usuario Varchar(15),
+	Id_Revisor varchar(10),
+	Nombre_Nuevo varchar (40),
+	Nombre_Viejo varchar (40),
+	ApellidoP_Nuevo varchar (40),
+	ApellidoP_Viejo varchar (40),
+	ApellidoM_Nuevo varchar (40),
+	ApellidoM_Viejo varchar (40),
+	Id_Carrera_Nuevo varchar (10),
+	Id_Carrera_Viejo varchar (10),
+	Correo_Nuevo varchar (100),
+	Correo_Viejo varchar (100),
+	Telefono_Nuevo varchar (10),
+	Telefono_Viejo varchar (10),
+	Transaccion varchar(15),
+	Fecha datetime
+ )
+ 
+ create table BitacoraDocumentos
+ (
+	Usuario Varchar(15),
+	Id_Doc varchar (10),
+	Solicitud_de_Residencia_Nuevo bit,
+	Solicitud_de_Residencia_Viejo bit,
+	Ante_Proyecto_Nuevo bit,
+	Ante_Proyecto_Viejo bit,
+	Carta_de_Pesentacion_Nuevo bit,
+	Carta_de_Pesentacion_Viejo bit,
+	Dictamen_Nuevo bit,
+	Dictamen_Viejo bit,
+	Asignacion_Asesor_Interno_Nuevo bit,
+	Asignacion_Asesor_Interno_Viejo bit,
+	Asignacion_Asesor_Externo_Nuevo bit,
+	Asignacion_Asesor_Externo_Viejo bit,
+	Seguimiento_Nuevo bit,
+	Seguimiento_Viejo bit,
+	Registro_de_Asesoria_Nuevo bit,
+	Registro_de_Asesoria_Viejo bit,
+	Carta_de_Terminacion_Nuevo bit,
+	Carta_de_Terminacion_Viejo bit,
+	Oficio_de_Solicitud_Revisor_Nuevo bit,
+	Oficio_de_Solicitud_Revisor_Viejo bit,
+	Asignacion_de_Revisor1_Nuevo bit,
+	Asignacion_de_Revisor1_Viejo bit,
+	Asignacion_de_Revisor2_Nuevo bit,
+	Asignacion_de_Revisor2_Viejo bit,
+	Formato_de_Evaluacion_Nuevo bit,
+	Formato_de_Evaluacion_Viejo bit,
+	Carta_Agradecimiento_Nuevo bit,
+	Carta_Agradecimiento_Viejo bit,
+	Resumen_Ejecutivo_Nuevo bit,
+	Resumen_Ejecutivo_Viejo bit,
+	Informe_Nuevo bit,
+	Informe_Viejo bit,
+	Carta_Aceptacion_Nuevo bit,
+	Carta_Aceptacion_Viejo bit,
+	Transaccion varchar(15),
+	Fecha datetime
+ )
+ 
+ create table BitacoraProyecto
+ (
+	Usuario Varchar(15),
+	Id_Proyecto varchar (10),
+	Nombre_Empresa_Nuevo varchar (60),
+	Nombre_Empresa_Viejo varchar (60),
+	Nombre_Proyecto_Nuevo varchar (60),
+	Nombre_Proyecto_Viejo varchar (60),
+	Periodo_Residencia_Nuevo int,
+	Periodo_Residencia_Viejo int,
+	Periodo_Realizacion_Nuevo int,
+	Periodo_Realizacion_Viejo int,
+	Matricula_Al_Nuevo varchar(10),
+	Matricula_Al_Viejo varchar(10),
+	Id_Revisor_Asesor1_Nuevo varchar (10),
+	Id_Revisor_Asesor1_Viejo varchar (10),
+	Id_Revisor_Asesor2_Nuevo varchar (10),
+	Id_Revisor_Asesor2_Viejo varchar (10),
+	Id_Revisor_Asesor3_Nuevo varchar (10),
+	Id_Revisor_Asesor3_Viejo varchar (10),
+	Transaccion varchar(15),
+	Fecha datetime
+ )
+ 
+ create table BitacoraUsuario
+ (
+	Usuario Varchar(15),
+	Id_Usuario varchar (10),
+	Nombre_Nuevo varchar (40),
+	Nombre_Viejo varchar (40),
+	Contraseña_Nuevo varchar (20),
+	Contraseña_Viejo varchar (20),
+	Id_Carrera_Nuevo varchar (10),
+	Id_Carrera_Viejo varchar (10),
+	Transaccion varchar(15),
+	Fecha datetime
+ )
+ 
+ create table BitacoraCarrera
+ (
+	Usuario Varchar(15),
+	Id_Carrera varchar (10),
+	Nombre_Nuevo varchar (40),
+	Nombre_Viejo varchar (40),
+	Transaccion varchar(15),
+	Fecha datetime
+ )
+ 
+ -----TRIGGER Alumnos-----
+Create trigger tr_InsertarAlumno
+on Alumnos
+after insert
+as
+begin
+insert into BitacoraAlumnos(Usuario,Matricula_Al, Nombre_Nuevo,Nombre_Viejo, ApellidoP_Nuevo,ApellidoP_Viejo, ApellidoM_Nuevo,ApellidoM_Viejo, Id_Carrera_Nuevo,Id_Carrera_Viejo, Correo_Nuevo,Correo_Viejo, Telefono_Nuevo,Telefono_Viejo, Sexo_Nuevo,Sexo_Viejo,Transaccion,Fecha) 
+	values(null,(select Matricula_Al from inserted), (select Nombre from inserted), null, (select ApellidoP from inserted), null, (select ApellidoM from inserted),null,(select Id_Carrera from inserted),null,(select Correo from inserted),null,(select Telefono from inserted),null,(select Sexo from inserted),null, 'Insertar', GETDATE())
+END
+
+Create trigger tr_EliminarAlumno
+on Alumnos
+after delete
+as
+begin
+insert into BitacoraAlumnos(Usuario,Matricula_Al, Nombre_Nuevo,Nombre_Viejo, ApellidoP_Nuevo,ApellidoP_Viejo, ApellidoM_Nuevo,ApellidoM_Viejo,Id_Carrera_Nuevo,Id_Carrera_Viejo, Correo_Nuevo,Correo_Viejo, Telefono_Nuevo,Telefono_Viejo, Sexo_Nuevo,Sexo_Viejo,Transaccion,Fecha) 
+	values(null,(select Matricula_Al from deleted), (select Nombre from deleted), null, (select ApellidoP from deleted), null, (select ApellidoM from deleted),null,(select Id_Carrera from deleted),null,(select Correo from deleted),null,(select Telefono from deleted),null,(select Sexo from deleted),null, 'Eliminar', GETDATE())
+END
+
+Create trigger tr_AcutalizarAlumno    
+on Alumnos
+after update
+as
+begin
+insert into BitacoraAlumnos(Usuario,Matricula_Al, Nombre_Nuevo,Nombre_Viejo, ApellidoP_Nuevo,ApellidoP_Viejo, ApellidoM_Nuevo,ApellidoM_Viejo,Id_Carrera_Nuevo,Id_Carrera_Viejo, Correo_Nuevo,Correo_Viejo, Telefono_Nuevo,Telefono_Viejo, Sexo_Nuevo,Sexo_Viejo,Transaccion,Fecha) 
+	values(null,(select Matricula_Al from inserted), (select Nombre from inserted), (select Nombre from deleted), (select ApellidoP from inserted),(select ApellidoP from deleted), (select ApellidoM from inserted),(select ApellidoM from deleted),(select Id_Carrera from inserted),(select Id_Carrera from deleted),(select Correo from inserted),(select Correo from deleted),(select Telefono from inserted),(select Telefono from deleted),(select Sexo from inserted),(select Sexo from deleted), 'Actualizar', GETDATE())
+END
+
+-----TRIGGER_REVISORES-----------
+create trigger tr_InsertarRevisor
+on Revisores
+after insert
+as
+begin
+ insert into BitacoraRevisores(Usuario,Id_Revisor,Nombre_Nuevo ,Nombre_Viejo,ApellidoP_Nuevo,ApellidoP_Viejo,ApellidoM_Nuevo,ApellidoM_Viejo,Id_Carrera_Nuevo ,Id_Carrera_Viejo,Correo_Nuevo,Correo_Viejo,Telefono_Nuevo ,Telefono_Viejo,Transaccion ,fecha) 
+ Values(null,(select Id_Revisor from inserted),(select Nombre from inserted),null,(select ApellidoP from inserted),null,(select ApellidoM from inserted),null,(select Id_Carrera from inserted),null,(select Correo from inserted),null,(select	Telefono from inserted),null,'Insertar',getdate())
+ end
+ 
+
+create trigger tr_EliminarRevisor
+on Revisores
+after delete
+as
+begin
+ insert into BitacoraRevisores(Usuario,Id_Revisor,Nombre_Nuevo ,Nombre_Viejo,ApellidoP_Nuevo,ApellidoP_Viejo,ApellidoM_Nuevo,ApellidoM_Viejo,Id_Carrera_Nuevo ,Id_Carrera_Viejo,Correo_Nuevo,Correo_Viejo,	Telefono_Nuevo ,Telefono_Viejo,Transaccion ,fecha) 
+ Values(null,(select Id_Revisor from deleted),(select Nombre from deleted),null,(select ApellidoP from deleted),null,(select ApellidoM from deleted),null,(select Id_Carrera from deleted),null,(select Correo from deleted),null,(select Telefono from deleted),null,'Eliminar',getdate())
+ end
+ 
+ create trigger tr_ActualizarRevisor
+ on Revisores
+ after update
+ as
+ begin
+	 insert into BitacoraRevisores(Usuario,Id_Revisor,Nombre_Nuevo ,Nombre_Viejo,ApellidoP_Nuevo,ApellidoP_Viejo,ApellidoM_Nuevo,ApellidoM_Viejo,Id_Carrera_Nuevo ,Id_Carrera_Viejo,Correo_Nuevo,Correo_Viejo,	Telefono_Nuevo ,Telefono_Viejo,Transaccion ,fecha) 
+ Values(null,(select Id_Revisor from inserted),(select Nombre from inserted),(select Nombre from deleted),(select ApellidoP from inserted),(select ApellidoP from deleted),(select ApellidoM from inserted),(select ApellidoM from deleted),(select Id_Carrera from inserted),(select Id_Carrera from deleted),(select Correo from inserted),(select Correo from deleted),(select Telefono from inserted),(Select Telefono from deleted),'Actualizar',getdate())
+ end
+ 
+ ----trigger DOCUMENTOS
+ CREATE TRIGGER tr_InsertarDocumentos
+ on Documentos
+ after insert
+ as 
+ begin
+ 	insert into BitacoraDocumentos( Usuario,Id_Doc,Solicitud_de_Residencia_Nuevo,Solicitud_de_Residencia_Viejo,Ante_Proyecto_Nuevo,Ante_Proyecto_Viejo,Carta_de_Pesentacion_Nuevo,Carta_de_Pesentacion_Viejo,Dictamen_Nuevo,Dictamen_Viejo,Asignacion_Asesor_Interno_Nuevo,Asignacion_Asesor_Interno_Viejo,Asignacion_Asesor_Externo_Nuevo,Asignacion_Asesor_Externo_Viejo,Seguimiento_Nuevo,Seguimiento_Viejo,Registro_de_Asesoria_Nuevo,Registro_de_Asesoria_Viejo,Carta_de_Terminacion_Nuevo,Carta_de_Terminacion_Viejo,Oficio_de_Solicitud_Revisor_Nuevo,Oficio_de_Solicitud_Revisor_Viejo,Asignacion_de_Revisor1_Nuevo,Asignacion_de_Revisor1_Viejo,Asignacion_de_Revisor2_Nuevo,Asignacion_de_Revisor2_Viejo,Formato_de_Evaluacion_Nuevo,Formato_de_Evaluacion_Viejo ,Carta_Agradecimiento_Nuevo,Carta_Agradecimiento_Viejo,Resumen_Ejecutivo_Nuevo,Resumen_Ejecutivo_Viejo,Informe_Nuevo,Informe_Viejo,Carta_Aceptacion_Nuevo,Carta_Aceptacion_Viejo,Transaccion,Fecha)
+	values(null,(select Id_Doc from inserted),(select Solicitud_de_Residencia from inserted),null,(select Ante_Proyecto from inserted),null,(select Carta_de_Pesentacion from inserted),null,(select Dictamen from inserted),null,(select Asignacion_Asesor_Interno from inserted),null,(select Asignacion_Asesor_Externo from inserted),null,(select Seguimiento from inserted),null,(select Registro_de_Asesoria from inserted),null,(select Carta_de_Terminacion from inserted),null,( select Oficio_de_Solicitud_Revisor from inserted),null,(select Asignacion_de_Revisor1 from inserted),null,(select Asignacion_de_Revisor2 from inserted),null,(select Formato_de_Evaluacion from inserted),null,(select Carta_Agradecimiento from inserted),null,(select Resumen_Ejecutivo from inserted),null,(select Informe from inserted),null,(select Carta_Aceptacion from inserted),null,'Insertar',Getdate())
+ end
+ 
+ create trigger tr_EliminarDocumentos
+ on Documentos
+ after delete
+ as
+ begin
+  insert into BitacoraDocumentos( Usuario,Id_Doc,Solicitud_de_Residencia_Nuevo,Solicitud_de_Residencia_Viejo,Ante_Proyecto_Nuevo,Ante_Proyecto_Viejo,Carta_de_Pesentacion_Nuevo,Carta_de_Pesentacion_Viejo,Dictamen_Nuevo,Dictamen_Viejo,Asignacion_Asesor_Interno_Nuevo,Asignacion_Asesor_Interno_Viejo,Asignacion_Asesor_Externo_Nuevo,Asignacion_Asesor_Externo_Viejo,Seguimiento_Nuevo,Seguimiento_Viejo,Registro_de_Asesoria_Nuevo,Registro_de_Asesoria_Viejo,Carta_de_Terminacion_Nuevo,Carta_de_Terminacion_Viejo,Oficio_de_Solicitud_Revisor_Nuevo,Oficio_de_Solicitud_Revisor_Viejo,Asignacion_de_Revisor1_Nuevo,Asignacion_de_Revisor1_Viejo,Asignacion_de_Revisor2_Nuevo,Asignacion_de_Revisor2_Viejo,Formato_de_Evaluacion_Nuevo,Formato_de_Evaluacion_Viejo ,Carta_Agradecimiento_Nuevo,Carta_Agradecimiento_Viejo,Resumen_Ejecutivo_Nuevo,Resumen_Ejecutivo_Viejo,Informe_Nuevo,Informe_Viejo,Carta_Aceptacion_Nuevo,Carta_Aceptacion_Viejo,Transaccion,Fecha)
+  values(null,(select Id_Doc from deleted),(select Solicitud_de_Residencia from deleted),null,(select Ante_Proyecto from deleted),null,(select Carta_de_Pesentacion from deleted),null,(select Dictamen from deleted),null,(select Asignacion_Asesor_Interno from deleted),null,(select Asignacion_Asesor_Externo from deleted),null,(select Seguimiento from deleted),null,(select Registro_de_Asesoria from deleted),null,(select Carta_de_Terminacion from deleted),null,( select Oficio_de_Solicitud_Revisor from deleted),null,(select Asignacion_de_Revisor1 from deleted),null,(select Asignacion_de_Revisor2 from deleted),null,(select Formato_de_Evaluacion from deleted),null,(select Carta_Agradecimiento from deleted),null,(select Resumen_Ejecutivo from deleted),null,(select Informe from deleted),null,(select Carta_Aceptacion from deleted),null,'Eliminar',getdate())
+ end
+ 
+ create trigger tr_ActualizarDocumentos
+ on Documentos
+ after update
+ as
+ begin
+	insert into BitacoraDocumentos( Usuario,Id_Doc,Solicitud_de_Residencia_Nuevo,Solicitud_de_Residencia_Viejo,Ante_Proyecto_Nuevo,Ante_Proyecto_Viejo,Carta_de_Pesentacion_Nuevo,Carta_de_Pesentacion_Viejo,Dictamen_Nuevo,Dictamen_Viejo,Asignacion_Asesor_Interno_Nuevo,Asignacion_Asesor_Interno_Viejo,Asignacion_Asesor_Externo_Nuevo,Asignacion_Asesor_Externo_Viejo,Seguimiento_Nuevo,Seguimiento_Viejo,Registro_de_Asesoria_Nuevo,Registro_de_Asesoria_Viejo,Carta_de_Terminacion_Nuevo,Carta_de_Terminacion_Viejo,Oficio_de_Solicitud_Revisor_Nuevo,Oficio_de_Solicitud_Revisor_Viejo,Asignacion_de_Revisor1_Nuevo,Asignacion_de_Revisor1_Viejo,Asignacion_de_Revisor2_Nuevo,Asignacion_de_Revisor2_Viejo,Formato_de_Evaluacion_Nuevo,Formato_de_Evaluacion_Viejo ,Carta_Agradecimiento_Nuevo,Carta_Agradecimiento_Viejo,Resumen_Ejecutivo_Nuevo,Resumen_Ejecutivo_Viejo,Informe_Nuevo,Informe_Viejo,Carta_Aceptacion_Nuevo,Carta_Aceptacion_Viejo,Transaccion,Fecha)
+	values(null,(select Id_Doc from inserted),(select Solicitud_de_Residencia from inserted),(select Solicitud_de_Residencia from deleted),(select Ante_Proyecto from inserted),(select Ante_Proyecto from deleted),(select Carta_de_Pesentacion from inserted),(select Carta_de_Pesentacion from deleted),(select Dictamen from inserted),(select Dictamen from deleted),(select Asignacion_Asesor_Interno from inserted),(select Asignacion_Asesor_Interno from deleted),(select Asignacion_Asesor_Externo from inserted),(select Asignacion_Asesor_Externo from deleted),(select Seguimiento from inserted),(select Seguimiento from deleted),(select Registro_de_Asesoria from inserted),(select Registro_de_Asesoria from deleted),(select Carta_de_Terminacion from inserted),(select Carta_de_Terminacion from deleted),( select Oficio_de_Solicitud_Revisor from inserted),(select Oficio_de_Solicitud_Revisor from deleted),(select Asignacion_de_Revisor1 from inserted),(select Asignacion_de_Revisor1 from deleted),(select Asignacion_de_Revisor2 from inserted),(select Asignacion_de_Revisor2 from deleted),(select Formato_de_Evaluacion from inserted),(select Formato_de_Evaluacion from deleted),
+	(select Carta_Agradecimiento from inserted),(select Carta_Agradecimiento from deleted),(select Resumen_Ejecutivo from inserted),(select Resumen_Ejecutivo from deleted),(select Informe from inserted),(select Informe from deleted),(select Carta_Aceptacion from inserted),(select Carta_Aceptacion from deleted),'Actualizar',getdate())
+ end
+ 
+ ------Trigger-Proyectos-----------
+ create trigger tr_InsertarProyecto
+ on Proyecto
+ after insert
+ as
+ begin
+	insert into BitacoraProyecto(Usuario,Id_Proyecto,Nombre_Empresa_Nuevo,Nombre_Empresa_Viejo,Nombre_Proyecto_Nuevo,Nombre_Proyecto_Viejo,Periodo_Residencia_Nuevo,Periodo_Residencia_Viejo,Periodo_Realizacion_Nuevo,Periodo_Realizacion_Viejo,Matricula_Al_Nuevo,Matricula_Al_Viejo,Id_Revisor_Asesor1_Nuevo,Id_Revisor_Asesor1_Viejo,Id_Revisor_Asesor2_Nuevo,Id_Revisor_Asesor2_Viejo,Id_Revisor_Asesor3_Nuevo,Id_Revisor_Asesor3_Viejo,Transaccion,Fecha)
+	values(null,(select Id_Proyecto from inserted),(select Nombre_Empresa from inserted),null,(select Nombre_Proyecto from inserted),null,(select Periodo_Residencia from inserted),null,(select Periodo_Realizacion from inserted),null,(select Matricula_Al from inserted),null,(select Id_Revisor_Asesor1 from inserted),null,(select Id_Revisor_Asesor2 from inserted),null,(select Id_Revisor_Asesor3 from inserted),null,'Insertar',getdate())
+ end
+ 
+ create trigger tr_EliminarProyecto
+ on Proyecto
+ after delete
+ as
+ begin
+	insert into BitacoraProyecto(Usuario,Id_Proyecto,Nombre_Empresa_Nuevo,Nombre_Empresa_Viejo,Nombre_Proyecto_Nuevo,Nombre_Proyecto_Viejo,Periodo_Residencia_Nuevo,Periodo_Residencia_Viejo,Periodo_Realizacion_Nuevo,Periodo_Realizacion_Viejo,Matricula_Al_Nuevo,Matricula_Al_Viejo,Id_Revisor_Asesor1_Nuevo,Id_Revisor_Asesor1_Viejo,Id_Revisor_Asesor2_Nuevo,Id_Revisor_Asesor2_Viejo,Id_Revisor_Asesor3_Nuevo,Id_Revisor_Asesor3_Viejo,Transaccion,Fecha)
+	values(null,(select Id_Proyecto from deleted),(select Nombre_Empresa from deleted),null,(select Nombre_Proyecto from deleted),null,(select Periodo_Residencia from deleted),null,(select Periodo_Realizacion from deleted),null,(select Matricula_Al from deleted),null,(select Id_Revisor_Asesor1 from deleted),null,(select Id_Revisor_Asesor2 from deleted),null,(select Id_Revisor_Asesor3 from deleted),null,'Eliminar',getdate())
+ end
+ 
+ create trigger tr_ActualizarProyecto
+ on Proyecto
+ after update
+ as
+ begin
+	insert into BitacoraProyecto(Usuario,Id_Proyecto,Nombre_Empresa_Nuevo,Nombre_Empresa_Viejo,Nombre_Proyecto_Nuevo,Nombre_Proyecto_Viejo,Periodo_Residencia_Nuevo,Periodo_Residencia_Viejo,Periodo_Realizacion_Nuevo,Periodo_Realizacion_Viejo,Matricula_Al_Nuevo,Matricula_Al_Viejo,Id_Revisor_Asesor1_Nuevo,Id_Revisor_Asesor1_Viejo,Id_Revisor_Asesor2_Nuevo,Id_Revisor_Asesor2_Viejo,Id_Revisor_Asesor3_Nuevo,Id_Revisor_Asesor3_Viejo,Transaccion,Fecha)
+	values(null,(select Id_Proyecto from inserted),(select Nombre_Empresa from inserted),(select Nombre_Empresa from deleted),(select Nombre_Proyecto from inserted),(select Nombre_Proyecto from deleted),(select Periodo_Residencia from inserted),(select Periodo_Residencia from deleted),(select Periodo_Realizacion from inserted),(select Periodo_Realizacion from deleted),(select Matricula_Al from inserted),(select Matricula_Al from deleted),(select Id_Revisor_Asesor1 from inserted),(select Id_Revisor_Asesor1 from deleted),(select Id_Revisor_Asesor2 from inserted),(select Id_Revisor_Asesor2 from deleted),(select Id_Revisor_Asesor3 from inserted),(select Id_Revisor_Asesor3 from deleted),'Actualizar',getdate())
+ end
+ 
+ ------trigger-Usuario-------
+ create trigger tr_InsertarUsuario
+ on Usuario
+ after insert
+ as
+ begin 
+	insert into BitacoraUsuario(Usuario,Id_Usuario,Nombre_Nuevo,Nombre_Viejo,Contraseña_Nuevo,Contraseña_Viejo,Id_Carrera_Nuevo,Id_Carrera_Viejo,Transaccion,Fecha)
+	values(null,(select Id_Usuario from inserted),(select Nombre from inserted),null,(select Contraseña from inserted),null,(select Id_Carrera from inserted),null,'Insertar',getdate())
+ end
+ 	
+create trigger tr_EliminarUsuario
+ on Usuario
+ after delete
+ as
+ begin 
+	insert into BitacoraUsuario(Usuario,Id_Usuario,Nombre_Nuevo,Nombre_Viejo,Contraseña_Nuevo,Contraseña_Viejo,Id_Carrera_Nuevo,Id_Carrera_Viejo,Transaccion,Fecha)
+	values(null,(select Id_Usuario from deleted),(select Nombre from deleted),null,(select Contraseña from deleted),null,(select Id_Carrera from deleted),null,'Eliminar',getdate())
+ end
+ 
+ create trigger tr_ActualizarUsuario
+ on Usuario
+ after update
+ as
+ begin 
+	insert into BitacoraUsuario(Usuario,Id_Usuario,Nombre_Nuevo,Nombre_Viejo,Contraseña_Nuevo,Contraseña_Viejo,Id_Carrera_Nuevo,Id_Carrera_Viejo,Transaccion,Fecha)
+	values(null,(select Id_Usuario from inserted),(select Nombre from inserted),(select Nombre from deleted),(select Contraseña from inserted),(Select Contraseña from deleted),(select Id_Carrera from inserted),(select Id_Carrera from deleted),'Actualizar',getdate())
+ end
+ 
+ ----------trigger Carrera
+create trigger tr_InsertarCarrera
+on Carrera
+after insert
+as
+begin
+	insert into BitacoraCarrera (Usuario,Id_Carrera,Nombre_Nuevo,Nombre_Viejo,Transaccion,Fecha)
+	values (null,(select Id_Carrera from inserted),(select Nombre from inserted),null,'Insertar',getdate())
+end
+
+create trigger tr_EliminarCarrera
+on Carrera
+after delete
+as
+begin
+	insert into BitacoraCarrera (Usuario,Id_Carrera,Nombre_Nuevo,Nombre_Viejo,Transaccion,Fecha)
+	values (null,(select Id_Carrera from deleted),(select Nombre from deleted),null,'Eliminar',getdate())
+end
+
+create trigger tr_ActualizarCarrera
+on Carrera
+after update
+as
+begin
+	insert into BitacoraCarrera (Usuario,Id_Carrera,Nombre_Nuevo,Nombre_Viejo,Transaccion,Fecha)
+	values (null,(select Id_Carrera from inserted),(select Nombre from inserted),(select Nombre from deleted),'Actualizar',getdate())
+end
