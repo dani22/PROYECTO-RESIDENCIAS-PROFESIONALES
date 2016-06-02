@@ -12,6 +12,7 @@ Id_Carrera varchar (10) not null,
 Correo varchar (100),
 Telefono varchar(10),
 Sexo varchar(1) not null
+Calificacion varchar(5) null
 )
 
 create table Revisores
@@ -75,18 +76,7 @@ create table Carrera
  Nombre varchar (40)not null
  )
 
- create table AlumnosCalificacion
-(
-Matricula_Al varchar(10)primary key,
-Nombre varchar (40),
-ApellidoP varchar (40),
-ApellidoM varchar (40),
-Id_Carrera varchar (10),
-Correo varchar (100),
-Telefono varchar(10),
-Sexo varchar(1),
-Calificacion varchar(5)
-)
+
 
 --creacion de relaciones
  alter table Documentos add foreign key (Matricula_Al)
